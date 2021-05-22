@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+    db:
+        image: postgres:13
+        ports:
+            - "5432:5432"
+        environment: 
+            POSTGRES_HOST_AUTH_METHOD: trust
+            POSTGRES_DB: frisbeeboys_dev
+        volumes:
+            - ./Data/Scripts/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+            
