@@ -1,0 +1,9 @@
+﻿@model Frisbeeboys.Web.Controllers.Scorecards.Models.ScorecardsIndexModel
+
+<form class="mb-4" method="GET" action="@Url.Action("Index")">
+    <select name="course" asp-for="Course" asp-items="Model.Courses" onchange="this.form.submit()">
+    </select>
+    
+    <select class="w-52" name="layout" asp-for="Layout" asp-items="Model.Layouts" onchange="this.form.submit()">
+    </select>
+</form>

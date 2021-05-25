@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Frisbeeboys.Web.Controllers.Scorecards.Models;
 using Frisbeeboys.Web.Controllers.Scorecards.Services;
 using Frisbeeboys.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Frisbeeboys.Web.Controllers.Scorecards
 {
@@ -22,8 +24,21 @@ namespace Frisbeeboys.Web.Controllers.Scorecards
             string? course = null,
             string? layout = null)
         {
+            var courses = await _scorecardService.GetCourses();
+
+            course = course != null && courses.Contains(course) ? course : null;
+            layout = layout != null && course != null && courses[course].Contains(layout) ? layout : null;
+            
             var (scorecards, total) = await _scorecardService.GetScorecards(page, pageSize, course, layout);
-            return View(new PageModel<ScorecardModel>(scorecards, page, pageSize, total));
+
+            var model = new ScorecardsIndexModel(new PageModel<ScorecardModel>(scorecards, page, pageSize, total),
+                courses,
+                course,
+                layout);
+            
+            return View(model);
         }
     }
+
+    
 }

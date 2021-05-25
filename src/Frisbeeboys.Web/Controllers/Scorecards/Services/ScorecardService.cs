@@ -40,5 +40,15 @@ namespace Frisbeeboys.Web.Controllers.Scorecards.Services
 
             return (scorecards, totalCount);
         }
+
+        public async Task<ILookup<string, string>> GetCourses()
+        {
+            var courses = await _database.Query<(string CourseName, string LayoutName)>()
+                .SelectDistinct("s.course_name, s.layout_name")
+                .From("scorecards s")
+                .AllAsync();
+
+            return courses.ToLookup(s => s.CourseName, s => s.LayoutName);
+        }
     }
 }

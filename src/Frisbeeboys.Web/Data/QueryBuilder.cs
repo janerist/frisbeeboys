@@ -11,7 +11,7 @@ namespace Frisbeeboys.Web.Data
 {
     public class QueryBuilder<T>
     {
-        private readonly Func<Task<NpgsqlConnection>> _connectionFactory;
+        private readonly Func<NpgsqlConnection> _connectionFactory;
         private readonly string? _alias;
 
         private string? _cte;
@@ -30,7 +30,7 @@ namespace Frisbeeboys.Web.Data
         private IEnumerable<string> _groupByClauses = Enumerable.Empty<string>();
         private IEnumerable<string> _orderByClauses = Enumerable.Empty<string>();
 
-        public QueryBuilder(Func<Task<NpgsqlConnection>> connectionFactory, string? alias)
+        public QueryBuilder(Func<NpgsqlConnection> connectionFactory, string? alias)
         {
             _connectionFactory = connectionFactory;
             _alias = alias;
@@ -357,19 +357,19 @@ namespace Frisbeeboys.Web.Data
 
         public async Task<T> FirstOrDefaultAsync()
         {
-            await using var cnn = await _connectionFactory();
+            await using var cnn = _connectionFactory();
             return await cnn.QueryFirstOrDefaultAsync<T>(GenerateSql(), _parameters);
         }
 
         public async Task<T> FirstAsync()
         {
-            await using var cnn = await _connectionFactory();
+            await using var cnn = _connectionFactory();
             return await cnn.QueryFirstAsync<T>(GenerateSql(), _parameters);
         }
 
         public async Task<IList<T>> AllAsync()
         {
-            await using var cnn = await _connectionFactory();
+            await using var cnn = _connectionFactory();
             return (await cnn.QueryAsync<T>(GenerateSql(), _parameters)).ToArray();
         }
 
@@ -390,7 +390,7 @@ namespace Frisbeeboys.Web.Data
             var pageSql = GenerateSql();
             var sql = countSql + ";" + pageSql + ";";
 
-            await using var cnn = await _connectionFactory();
+            await using var cnn = _connectionFactory();
             using var gridReader = await cnn.QueryMultipleAsync(sql, _parameters);
             IDictionary<string, object> dapperRow = (await gridReader.ReadAsync()).Single();
             var count = Convert.ToInt32(dapperRow.Values.First());
@@ -406,7 +406,7 @@ namespace Frisbeeboys.Web.Data
 
         public async Task<int> CountAsync()
         {
-            await using var cnn = await _connectionFactory();
+            await using var cnn = _connectionFactory();
             IDictionary<string, object> dapperRow = await cnn.QuerySingleAsync<dynamic>(CountSql(), _parameters);
             var count = dapperRow.Values.First();
             return Convert.ToInt32(count);

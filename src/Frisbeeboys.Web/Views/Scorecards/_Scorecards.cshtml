@@ -1,0 +1,6 @@
+﻿@model Frisbeeboys.Web.Controllers.Scorecards.Models.ScorecardModel[]
+
+@foreach (var scorecard in Model)
+{
+    <partial name="_Scorecard" model="scorecard" />
+}

@@ -1,0 +1,72 @@
+﻿@model Frisbeeboys.Web.Controllers.Scorecards.Models.ScorecardModel
+
+<div class="mb-4 shadow-md max-w-2xl">
+    <div class="bg-white p-5">
+        <div class="font-semibold">@Model.CourseName</div>
+        <div class="text-gray-500">@Model.LayoutName</div>
+        <table class="mt-3">
+            <tr>
+                <td class="text-right text-xs">HOLE</td>
+                @foreach (var i in Enumerable.Range(1, Model.HolePars.Length))
+                {
+                    <td class="font-semibold text-center p-1">@i</td>
+                }
+                <td class="font-semibold text-center pl-2">TOT</td>
+                <td class="font-semibold text-center pl-2">+/-</td>
+            </tr>
+            <tr class="border-b-2">
+                <td class="text-right text-xs">PAR</td>
+                @foreach (var par in Model.HolePars)
+                {
+                    <td class="text-center p-1">@par</td>
+                }
+                <td class="text-center">@Model.HolePars.Sum()</td>
+                <td></td>
+            </tr>
+            @foreach (var player in Model.Players)
+            {
+                <tr class="mb-2">
+                    <td>@player.Name</td>
+                    @for (var i = 0; i < player.HoleScores.Length; i++)
+                    {
+                        var score = player.HoleScores[i];
+                        var c = "";
+                        if (score == 1)
+                        {
+                            // Ace
+                            c = "bg-blue-900 text-white";
+                        }
+                        else if (score > Model.HolePars[i])
+                        {
+                            // Bogey
+                            var intensity = 100 + (score - Model.HolePars[i]) * 100;
+                            c = "bg-yellow-" + intensity;
+                        }
+                        else if (score < Model.HolePars[i])
+                        {
+                            // Birdie
+                            var intensity = 300 + (Model.HolePars[i] - score) * 100;
+                            c = $"bg-blue-{intensity} text-white";
+                        }
+
+                        <td class="text-center p-1 @c">@player.HoleScores[i]</td>
+                    }
+                    <td class="text-center">@player.Total</td>
+                    <td class="text-center">
+                        @(player.Par switch {
+                            0 => "E",
+                            >0 => "+" + player.Par,
+                            _ => player.Par
+                            })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="bg-yellow-600 text-white p-2 flex">
+        <div class="flex-auto font-semibold text-sm">@Model.Date.ToString("f")</div>
+        <div class="flex-auto text-right font-semibold">
+            🥏
+        </div>
+    </div>
+</div>
