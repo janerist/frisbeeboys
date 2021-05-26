@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <Target Name="Tailwind" BeforeTargets="Publish">
-        <Exec Command="npm install"/>
-        <Exec Command="npm run build"/>
+        <Exec Command="npm install" />
+        <Exec Command="npm run build" />
     </Target>
 </Project>
