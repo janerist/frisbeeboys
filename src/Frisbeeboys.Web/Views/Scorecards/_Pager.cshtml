@@ -65,7 +65,7 @@
                 <a title="Previous"
                    class="table-cell text-center border-gray-300 border-2 py-1 px-3 align-middle border-r-0 @(!hasNext ? "border-r-2" : "")"
                    href="@Url.Action("Index", new {page = Model.Scorecards.Page - 1, course = Model.Course, layout = Model.Layout})">
-                    🞀
+                    Prev
                 </a>
             }
             @if (hasNext)
@@ -73,7 +73,7 @@
                 <a title="Next"
                    class="table-cell text-center border-gray-300 border-2 py-1 px-3 align-middle"
                    href="@Url.Action("Index", new {page = Model.Scorecards.Page + 1, course = Model.Course, layout = Model.Layout})">
-                    🞂
+                    Next
                 </a>
             }
         </div>

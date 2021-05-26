@@ -17,4 +17,8 @@
         <Folder Include="Pages\Scorecards" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
+    </ItemGroup>
+
 </Project>
