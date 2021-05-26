@@ -13,12 +13,8 @@
         <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Pages\Scorecards" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
-    </ItemGroup>
-
+    <Target Name="Tailwind" BeforeTargets="Publish">
+        <Exec Command="npm install"/>
+        <Exec Command="npm run build"/>
+    </Target>
 </Project>

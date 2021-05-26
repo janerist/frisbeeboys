@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "npx tailwindcss-cli@latest build styles.css -o wwwroot/css/tailwind.css"
+    "build": "npx tailwindcss build styles.css -o wwwroot/css/tailwind.css"
   },
   "keywords": [],
   "author": "",

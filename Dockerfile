@@ -4,6 +4,9 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+
 WORKDIR /src
 COPY ["src/Frisbeeboys.Web/Frisbeeboys.Web.csproj", "Frisbeeboys.Web/"]
 RUN dotnet restore "Frisbeeboys.Web/Frisbeeboys.Web.csproj"
