@@ -46,6 +46,20 @@ namespace Frisbeeboys.Web
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseSerilog()
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder
+                        .UseStartup<Startup>();
+
+                    // For running in Railway
+                    var portVar = Environment.GetEnvironmentVariable("PORT");
+                    if (portVar is {Length: >0} && int.TryParse(portVar, out var port))
+                    {
+                        webBuilder.ConfigureKestrel(options =>
+                        {
+                            options.ListenAnyIP(port);
+                        });
+                    }
+                });
     }
 }

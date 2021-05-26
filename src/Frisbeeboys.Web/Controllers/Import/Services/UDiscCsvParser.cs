@@ -23,7 +23,7 @@ Jan-Erik Strøm,Othilienborg,Standard,2020-07-16 12:40,39,5,5,3,3,2,4,3,3,3,6,4,
             await csvReader.ReadLineAsync();
 
             var csv = await csvReader.ReadToEndAsync();
-            if (string.IsNullOrWhiteSpace(csv))
+            if (string.IsNullOrWhiteSpace(csv)) 
             {
                 throw new UDiscCsvParserException("No content");
             }

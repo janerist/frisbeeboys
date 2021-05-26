@@ -35,8 +35,8 @@
 
 @if (totalCount > pageSize)
 {
-    <div class="bg-white text-black mb-4 p-4 flex">
-        @{ var styles = "flex-initial text-center border-2 border-gray-300 px-3 py-1 border-r-0"; }
+    <div class=" flex">
+        @{ var styles = "flex-initial text-center bg-white border-2 border-gray-300 px-3 py-1 border-r-0"; }
         <div class="@styles">
             Showing @start - @end of @totalCount
         </div>
@@ -50,7 +50,7 @@
             else
             {
                 <a title="@p"
-                   class="@styles @(p == page ? "bg-gray-400 text-white" : "")"
+                   class="@styles @(p == page ? "bg-gray-100" : "")"
                    href="@Url.Action("Index", new {page = p, course = Model.Course, layout = Model.Layout})">
                     @p
                 </a>

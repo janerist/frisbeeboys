@@ -17,14 +17,24 @@ namespace Frisbeeboys.Web.Controllers.Scorecards.Models
             string? course, string? layout)
         {
             Scorecards = scorecards;
-            Courses = new[] {new SelectListItem("All courses", "", course == null)}
-                .Concat(courses
-                    .Select(c => new SelectListItem(c.Key, c.Key, c.Key == course))
-                    .OrderBy(c => c.Value));
-            Layouts = new[] {new SelectListItem("All layouts", "", layout == null)}
-                .Concat(courses.Where(c => c.Key == course)
-                    .SelectMany(c => c.Select(l => new SelectListItem(l, l, l == layout)))
-                    .OrderBy(l => l.Value));
+            Courses = courses
+                .Select(c => new SelectListItem(c.Key, c.Key, c.Key == course))
+                .OrderBy(c => c.Value);
+
+            if (Courses.Count() > 1)
+            {
+                Courses = Courses.Prepend(new SelectListItem("All courses", "", course == null));
+            }
+                
+            Layouts = courses.Where(c => c.Key == course)
+                .SelectMany(c => c.Select(l => new SelectListItem(l, l, l == layout)))
+                .OrderBy(l => l.Value);
+
+            if (Layouts.Count() > 1)
+            {
+                Layouts = Layouts.Prepend(new SelectListItem("All layouts", "", layout == null));
+            }
+            
             Course = course;
             Layout = layout;
         }

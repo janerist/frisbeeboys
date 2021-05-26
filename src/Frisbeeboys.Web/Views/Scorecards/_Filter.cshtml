@@ -4,6 +4,9 @@
     <select name="course" asp-for="Course" asp-items="Model.Courses" onchange="this.form.submit()">
     </select>
     
-    <select class="w-52" name="layout" asp-for="Layout" asp-items="Model.Layouts" onchange="this.form.submit()">
-    </select>
+    @if (Model.Layouts.Any())
+    {
+        <select class="w-52" name="layout" asp-for="Layout" asp-items="Model.Layouts" onchange="this.form.submit()">
+        </select>
+    }
 </form>

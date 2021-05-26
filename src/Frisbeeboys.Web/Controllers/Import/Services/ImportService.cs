@@ -20,14 +20,15 @@ namespace Frisbeeboys.Web.Controllers.Import.Services
 
         public async Task<int> ImportAsync(IFormFile file)
         {
-            var udiscScorecards = await ParseCsvAsync(file.OpenReadStream());
+            var udiscScorecards = await ParseCsvAsync(file);
             return await SaveToDatabaseAsync(udiscScorecards);
         }
 
-        private Task<UDiscScorecard[]> ParseCsvAsync(Stream stream)
+        private async Task<UDiscScorecard[]> ParseCsvAsync(IFormFile file)
         {
+            await using var stream = file.OpenReadStream();
             using var reader = new StreamReader(stream);
-            return _parser.ParseUDiscCsvAsync(reader);
+            return await _parser.ParseUDiscCsvAsync(reader);
         }
 
         private async Task<int> SaveToDatabaseAsync(IEnumerable<UDiscScorecard> udiscScorecards)
@@ -36,7 +37,7 @@ namespace Frisbeeboys.Web.Controllers.Import.Services
 
             using var transaction = TransactionFactory.CreateTransactionScope();
             
-            foreach (var uDiscScorecard in udiscScorecards)
+            foreach (var uDiscScorecard in udiscScorecards.Where(s => s.Players.Count > 1))
             {
                 if (await UpsertScorecardAsync(uDiscScorecard) != null)
                 {
