@@ -4,14 +4,14 @@
     var page = Model.Scorecards.Page;
     var pageSize = Model.Scorecards.PageSize;
     var totalCount = Model.Scorecards.TotalCount;
-    
+
     var numPages = Math.Ceiling((double) totalCount / pageSize);
     bool hasPrevious = page > 1;
     bool hasNext = page < numPages;
     var start = 1 + pageSize * (page - 1);
     var end = Math.Min(totalCount, start + pageSize - 1);
 
-    int[] Pagination(int leftEdge = 2, int leftCurrent = 2, int rightCurrent = 4, int rightEdge = 2)
+    int[] Pagination(int leftEdge = 2, int leftCurrent = 2, int rightCurrent = 2, int rightEdge = 2)
     {
         var pages = new List<int>();
         var last = 0;
@@ -21,13 +21,15 @@
             if (num <= leftEdge
                 || (num > page - leftCurrent - 1 &&
                     num < page + rightCurrent)
-                || num > numPages - rightEdge) {
-                    if (last + 1 != num) {
-                        pages.Add(0);
-                    }
-                    pages.Add(num);
-                    last = num;
+                || num > numPages - rightEdge)
+            {
+                if (last + 1 != num)
+                {
+                    pages.Add(0);
                 }
+                pages.Add(num);
+                last = num;
+            }
         }
         return pages.ToArray();
     }
@@ -35,38 +37,45 @@
 
 @if (totalCount > pageSize)
 {
-    <div class=" flex">
-        @{ var styles = "flex-initial text-center bg-white border-2 border-gray-300 px-3 py-1 border-r-0"; }
-        <div class="@styles">
-            Showing @start - @end of @totalCount
-        </div>
-
-        @foreach (var p in Pagination())
-        {
-            @if (p == 0)
+    <div class="table w-full sm:w-auto bg-white">
+        <div class="table-row">
+            <div class="table-cell px-2 align-middle border-gray-300 border-2 border-r-0 whitespace-nowrap">
+                Showing @start - @end of @totalCount
+            </div>
+            @foreach (var p in Pagination())
             {
-                <div class="@styles">...</div>
+                if (p == 0)
+                {
+                    <div class="border-gray-300 border-2 py-1 px-3 border-r-0 align-middle hidden sm:table-cell">
+                        ...
+                    </div>
+                }
+                else
+                {
+                    <a title="@p"
+                       class="border-gray-300 border-2 py-1 px-3 border-r-0 align-middle hidden sm:table-cell"
+                       href="@Url.Action("Index", new {page = p, course = Model.Course, layout = Model.Layout})">
+                        @p
+                    </a>
+                }
             }
-            else
+
+            @if (hasPrevious)
             {
-                <a title="@p"
-                   class="@styles @(p == page ? "bg-gray-100" : "")"
-                   href="@Url.Action("Index", new {page = p, course = Model.Course, layout = Model.Layout})">
-                    @p
+                <a title="Previous"
+                   class="table-cell text-center border-gray-300 border-2 py-1 px-3 align-middle border-r-0 @(!hasNext ? "border-r-2" : "")"
+                   href="@Url.Action("Index", new {page = Model.Scorecards.Page - 1, course = Model.Course, layout = Model.Layout})">
+                    🞀
                 </a>
             }
-        }
-        @if (hasPrevious)
-        {
-            <a title="Previous"
-               class="@styles px-4 @(!hasNext ? "border-r-2" : "")"
-               href="@Url.Action("Index", new {page = Model.Scorecards.Page - 1, course = Model.Course, layout = Model.Layout})">🞀</a>
-        }
-        @if (hasNext)
-        {
-            <a title="Next"
-               class="@styles px-4 border-r-2"
-               href="@Url.Action("Index", new {page = Model.Scorecards.Page + 1, course = Model.Course, layout = Model.Layout})">🞂</a>
-        }
+            @if (hasNext)
+            {
+                <a title="Next"
+                   class="table-cell text-center border-gray-300 border-2 py-1 px-3 align-middle"
+                   href="@Url.Action("Index", new {page = Model.Scorecards.Page + 1, course = Model.Course, layout = Model.Layout})">
+                    🞂
+                </a>
+            }
+        </div>
     </div>
 }
