@@ -13,7 +13,7 @@ WORKDIR "/src/Frisbeeboys.Web"
 RUN dotnet build "Frisbeeboys.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Frisbeeboys.Web.csproj" -c Release -o /app/publish --no-build
+RUN dotnet publish "Frisbeeboys.Web.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
