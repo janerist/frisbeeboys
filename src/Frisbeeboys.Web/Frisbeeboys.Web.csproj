@@ -13,8 +13,20 @@
         <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
     </ItemGroup>
 
-    <Target Name="Tailwind" BeforeTargets="Publish">
+    <ItemGroup>
+        <Content Update="wwwroot\css\tailwind-dev.css" CopyToPublishDirectory="Never" />
+    </ItemGroup>
+
+    <Target Name="Tailwind" AfterTargets="ComputeFilesToPublish">
         <Exec Command="npm install" />
         <Exec Command="npm run build" />
+
+        <ItemGroup>
+            <DistFiles Include="wwwroot\css\tailwind.css;" />
+            <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>%(DistFiles.Identity)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            </ResolvedFileToPublish>
+        </ItemGroup>
     </Target>
 </Project>
