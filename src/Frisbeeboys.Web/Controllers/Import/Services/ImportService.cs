@@ -18,17 +18,23 @@ namespace Frisbeeboys.Web.Controllers.Import.Services
             _database = database;
         }
 
-        public async Task<int> ImportAsync(IFormFile file)
+        public async Task<int> ImportAsync(string csv)
         {
-            var udiscScorecards = await ParseCsvAsync(file);
-            return await SaveToDatabaseAsync(udiscScorecards);
+            using var reader = new StringReader(csv);
+            return await Import(reader);
         }
 
-        private async Task<UDiscScorecard[]> ParseCsvAsync(IFormFile file)
+        public async Task<int> ImportAsync(IFormFile file)
         {
             await using var stream = file.OpenReadStream();
             using var reader = new StreamReader(stream);
-            return await _parser.ParseUDiscCsvAsync(reader);
+            return await Import(reader);
+        }
+
+        private async Task<int> Import(TextReader reader)
+        {
+            var udiscScorecards = await _parser.ParseUDiscCsvAsync(reader);
+            return await SaveToDatabaseAsync(udiscScorecards);
         }
 
         private async Task<int> SaveToDatabaseAsync(IEnumerable<UDiscScorecard> udiscScorecards)
@@ -49,7 +55,7 @@ namespace Frisbeeboys.Web.Controllers.Import.Services
 
             return count;
         }
-        
+
         private async Task<int?> UpsertScorecardAsync(UDiscScorecard scorecard)
         {
             const string insertSql =

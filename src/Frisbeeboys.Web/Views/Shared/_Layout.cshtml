@@ -12,15 +12,15 @@
     </environment>
 </head>
 <body class="bg-gray-200">
-<header class="bg-gray-700 p-4 text-white sticky top-0 z-50 border-b-4 border-blue-500 flex">
-    <div class="flex-auto text-xl font-bold">
-        <a href="@Url.Content("~/")">🥏 Frisbeeboys</a>
+<header class="bg-gray-700 p-4 text-white sticky top-0 z-50 border-b-4 border-blue-500 flex flex-nowrap">
+    <a class="flex-none text-xl font-bold" href="@Url.Content("~/")">🥏 Frisbeeboys</a>
+    <div class="flex-grow self-center text-gray-300 ml-4 sm:ml-10 text-sm sm:text-base">
+        <a class="hover:text-white" asp-controller="Scorecards" asp-action="Index">Scorecards</a>
+        <a class="hover:text-white ml-2" asp-controller="Import" asp-action="Index">Import</a>
     </div>
-    <div class="justify-self-end">
-        <a href="https://github.com/janerist/frisbeeboys">
-            <img src="~/img/GitHub-Mark-32px.png" alt="GitHub" class="w-7 h-7" />
-        </a>
-    </div>
+    <a class="flex-none" href="https://github.com/janerist/frisbeeboys">
+        <img src="~/img/GitHub-Mark-32px.png" alt="GitHub" class="w-7 h-7" />
+    </a>
 </header>
 <main class="container p-2 sm:p-4">
     @RenderBody()
